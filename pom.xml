@@ -2,7 +2,16 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.serguei-p</groupId>
   <artifactId>test_utils</artifactId>
+  <name>test-utils</name>
+  <description>Test utilities</description>
+  <url>https://github.com/Serguei-P/test-utils</url>
   <version>1.0.0</version>
+  <licenses>
+    <license>
+      <name>MIT Licence</name>
+      <url>https://github.com/Serguei-P/test-utils/blob/master/LICENSE.txt</url>
+    </license>
+  </licenses>
   <developers>
     <developer>
       <name>Serguei Poliakov</name>
