@@ -1,0 +1,28 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.github.serguei-p</groupId>
+  <artifactId>test_utils</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <developers>
+    <developer>
+      <name>Serguei Poliakov</name>
+      <email>sergueip141@gmail.com</email>
+    </developer>
+  </developers>
+    <scm>
+    <connection>scm:git:https://github.com/Serguei-P/http.git</connection>
+    <url>https://github.com/Serguei-P/http.git</url>
+  </scm>
+  <properties>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.11</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  </project>
