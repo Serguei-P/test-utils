@@ -8,69 +8,82 @@ import java.util.List;
 public class ObjectValues {
 
     private List<OneValue> values = new ArrayList<>();
-    
+
     ObjectValues() {
-        
-    }
-    
-    public Object getObject(int index) {
-        return getObject(index, Class.class, false);
-    }
 
-    public String getString(int index) {
-        return (String)getObject(index, String.class, true);
-    }
-
-    public Integer getInteger(int index) {
-        return (Integer)getObject(index, Integer.class, true);
-    }
-
-    public Boolean getBoolean(int index) {
-        return (Boolean)getObject(index, Boolean.class, true);
     }
 
     public Object getObject(String name) {
-        return getObject(findByName(name));
+        return getObjectByName(name);
     }
 
     public String getString(String name) {
-        return getString(findByName(name));
+        return (String)getObjectByName(name, String.class);
     }
 
     public Integer getInteger(String name) {
-        return getInteger(findByName(name));
+        return (Integer)getObjectByName(name, Integer.class);
+    }
+
+    public int getInt(String name) {
+        Integer result = (Integer)getObjectByName(name, Integer.class);
+        if (result != null) {
+            return result;
+        } else {
+            return 0;
+        }
+    }
+
+    public Long getLong(String name) {
+        Object obj = getObjectByName(name, Long.class, Integer.class);
+        if (obj != null && obj instanceof Integer) {
+            return ((Integer)obj).longValue();
+        } else {
+            return (Long)obj;
+        }
     }
 
     public Boolean getBoolean(String name) {
-        return getBoolean(findByName(name));
+        return (Boolean)getObjectByName(name, Boolean.class);
+    }
+
+    public boolean getBool(String name) {
+        Boolean result = (Boolean)getObjectByName(name, Boolean.class);
+        if (result != null) {
+            return result;
+        } else {
+            return false;
+        }
     }
 
     void addValue(OneValue oneValue) {
         values.add(oneValue);
     }
 
-    private int findByName(String name) {
-        for (OneValue value : values) {
-            if (value.getName().equals(name)) {
-                return value.getPosition();
-            }
-        }
-        fail("Parameter with name \"" + name + "\" not found");
-        return 0;
-    }
-
-    private Object getObject(int index, Class<?> type, boolean checkType) {
-        Object object = values.get(index).getObject();
-        if (object != null && checkType) {
-            checkClass(object, type);
+    private Object getObjectByName(String name, Class<?>... types) {
+        Object object = findByName(name).getObject();
+        if (types.length > 0) {
+            checkClass(object, types);
         }
         return object;
     }
 
-    private void checkClass(Object object, Class<?> type) {
-        if (!(object.getClass().getName().equals(type.getName()))) {
-            throw new IllegalArgumentException(
-                    "Wrong class type, expected " + type.getName() + " but was " + object.getClass().getName());
+    private OneValue findByName(String name) {
+        for (OneValue value : values) {
+            if (value.getName().equals(name)) {
+                return value;
+            }
         }
+        fail("Parameter with name \"" + name + "\" not found");
+        return null;
+    }
+
+    private void checkClass(Object object, Class<?>[] types) {
+        for (Class<?> type : types) {
+            if (object == null || object.getClass().getName().equals(type.getName())) {
+                return;
+            }
+        }
+        fail("Wrong class type, expected " + types[0].getName() + " but was " + object.getClass().getName());
     }
 }

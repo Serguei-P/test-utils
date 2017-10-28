@@ -1,17 +1,23 @@
 package serguei.test_utils.equals;
 
-
 public class ClassToTest {
 
-    private final int errorCode;
+    public enum Error {
+        NONE, MISSING_FIELD, NO_NULL, WRONG_HASH
+    }
+
+    private final Error errorCode;
+    private static int errorDiff;
+
     private String stringValue1;
     private String stringValue2;
     private int intValue;
     private Integer integerValue;
     private TestSubclass subclassValue;
     private boolean booleanValue;
+    private Long longValue;
 
-    public ClassToTest(int errorCode) {
+    public ClassToTest(Error errorCode) {
         this.errorCode = errorCode;
     }
 
@@ -63,6 +69,14 @@ public class ClassToTest {
         this.booleanValue = booleanValue;
     }
 
+    public Long getLongValue() {
+        return longValue;
+    }
+
+    public void setLongValue(Long longValue) {
+        this.longValue = longValue;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -72,6 +86,9 @@ public class ClassToTest {
         result = prime * result + ((stringValue1 == null) ? 0 : stringValue1.hashCode());
         result = prime * result + ((stringValue2 == null) ? 0 : stringValue2.hashCode());
         result = prime * result + ((subclassValue == null) ? 0 : subclassValue.hashCode());
+        if (errorCode == Error.WRONG_HASH) {
+            result += errorDiff++;
+        }
         return result;
     }
 
@@ -90,14 +107,20 @@ public class ClassToTest {
         if (intValue != other.intValue) {
             return false;
         }
-        if (integerValue == null) {
-            if (other.integerValue != null) {
+        if (errorCode == Error.NO_NULL) {
+            if (!integerValue.equals(other.integerValue)) {
                 return false;
             }
-        } else if (!integerValue.equals(other.integerValue)) {
-            return false;
+        } else {
+            if (integerValue == null) {
+                if (other.integerValue != null) {
+                    return false;
+                }
+            } else if (!integerValue.equals(other.integerValue)) {
+                return false;
+            }
         }
-        if (errorCode != 1) {
+        if (errorCode != Error.MISSING_FIELD) {
             if (stringValue1 == null) {
                 if (other.stringValue1 != null) {
                     return false;
@@ -121,6 +144,13 @@ public class ClassToTest {
             return false;
         }
         if (booleanValue != other.booleanValue) {
+            return false;
+        }
+        if (longValue == null) {
+            if (other.longValue != null) {
+                return false;
+            }
+        } else if (!longValue.equals(other.longValue)) {
             return false;
         }
         return true;

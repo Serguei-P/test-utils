@@ -10,7 +10,7 @@ public class EqualsTest {
 
     @Test
     public void shouldCheckEquals() {
-        EqualsTester tester = new EqualsTester(new MyObjectGenerator(0));
+        EqualsTester tester = new EqualsTester(new MyObjectGenerator(ClassToTest.Error.NONE));
         setValues(tester);
 
         tester.test();
@@ -18,26 +18,43 @@ public class EqualsTest {
 
     @Test(expected = AssertionError.class)
     public void shouldFailWhenFieldMissing() {
-        EqualsTester tester = new EqualsTester(new MyObjectGenerator(1));
+        EqualsTester tester = new EqualsTester(new MyObjectGenerator(ClassToTest.Error.MISSING_FIELD));
+        setValues(tester);
+
+        tester.test();
+    }
+
+    @Test(expected = Exception.class)
+    public void shouldFailWhenNoCheckForNull() {
+        EqualsTester tester = new EqualsTester(new MyObjectGenerator(ClassToTest.Error.NO_NULL));
+        setValues(tester);
+
+        tester.test();
+    }
+
+    @Test(expected = AssertionError.class)
+    public void shouldFailWhenNoWrongHash() {
+        EqualsTester tester = new EqualsTester(new MyObjectGenerator(ClassToTest.Error.WRONG_HASH));
         setValues(tester);
 
         tester.test();
     }
 
     private void setValues(EqualsTester tester) {
-        tester.addValues(0, "stringValue1", "value11", "value12", null);
-        tester.addValues(1, "stringValue2", "value21", "value22", null);
-        tester.addValues(2, "intValue", 1, 2);
-        tester.addValues(3, "integerValue", 3, 4, null);
-        tester.addValues(4, "subclassValue", new TestSubclass("v1", "v2"), new TestSubclass("v3", "v4"), null);
-        tester.addValues(5, "booleanValue", true, false);
+        tester.addStringValues("stringValue1");
+        tester.addStringValues("stringValue2");
+        tester.addIntegerValues("intValue");
+        tester.addIntegerValues("integerValue");
+        tester.addValues("subclassValue", new TestSubclass("v1", "v2"), new TestSubclass("v3", "v4"), null);
+        tester.addBooleanValues("booleanValue");
+        tester.addLongValues("longValue");
     }
 
     private static class MyObjectGenerator implements ObjectGenerator {
 
-        private final int errorCode;
+        private final ClassToTest.Error errorCode;
 
-        public MyObjectGenerator(int errorCode) {
+        public MyObjectGenerator(ClassToTest.Error errorCode) {
             this.errorCode = errorCode;
         }
 
@@ -45,10 +62,11 @@ public class EqualsTest {
             ClassToTest result = new ClassToTest(errorCode);
             result.setStringValue1(values.getString("stringValue1"));
             result.setStringValue2(values.getString("stringValue2"));
-            result.setIntValue(values.getInteger("intValue"));
+            result.setIntValue(values.getInt("intValue"));
             result.setIntegerValue(values.getInteger("integerValue"));
             result.setSubclassValue((TestSubclass)values.getObject("subclassValue"));
-            result.setBooleanValue(values.getBoolean("booleanValue"));
+            result.setBooleanValue(values.getBool("booleanValue"));
+            result.setLongValue(values.getLong("longValue"));
             return result;
         }
 
