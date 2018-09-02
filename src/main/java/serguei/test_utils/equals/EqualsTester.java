@@ -76,6 +76,9 @@ public class EqualsTester {
                 }
             }
         }
+        if (baseValue.equals(null)) {
+            fail("Non-null object equals null");
+        }
     }
 
     private void checkEquality(Object value1, Object value2, Parameter param, int valueIndex) {
