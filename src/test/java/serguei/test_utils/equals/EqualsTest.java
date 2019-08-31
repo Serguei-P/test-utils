@@ -40,9 +40,17 @@ public class EqualsTest {
         tester.test();
     }
 
+    @Test(expected = AssertionError.class)
+    public void shouldFailWhenNotEqualsToItself() {
+        EqualsTester tester = new EqualsTester(new MyObjectGenerator(ClassToTest.Error.NOT_EQUAL_TO_ITSELF));
+        setValues(tester);
+
+        tester.test();
+    }
+
     private void setValues(EqualsTester tester) {
         tester.addStringValues("stringValue1");
-        tester.addStringValues("stringValue2");
+        tester.addStringValuesWithNulls("stringValue2");
         tester.addIntegerValues("intValue");
         tester.addIntegerValues("integerValue");
         tester.addValues("subclassValue", new TestSubclass("v1", "v2"), new TestSubclass("v3", "v4"), null);

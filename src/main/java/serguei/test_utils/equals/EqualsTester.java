@@ -30,6 +30,14 @@ public class EqualsTester {
         addValues(name, values);
     }
 
+    public void addStringValuesWithNulls(String name) {
+        Object[] values = new String[3];
+        values[0] = name + "_value_1";
+        values[1] = name + "_value_2";
+        values[2] = null;
+        addValues(name, values);
+    }
+
     public void addIntegerValues(String name) {
         Object[] values = new Integer[3];
         Integer value = intValue++;
@@ -78,6 +86,9 @@ public class EqualsTester {
         }
         if (baseValue.equals(null)) {
             fail("Non-null object equals null");
+        }
+        if (!baseValue.equals(baseValue)) {
+            fail("Not equals to itself");
         }
     }
 

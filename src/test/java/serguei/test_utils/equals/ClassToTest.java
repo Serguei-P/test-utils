@@ -3,7 +3,7 @@ package serguei.test_utils.equals;
 public class ClassToTest {
 
     public enum Error {
-        NONE, MISSING_FIELD, NO_NULL, WRONG_HASH
+        NONE, MISSING_FIELD, NO_NULL, WRONG_HASH, NOT_EQUAL_TO_ITSELF
     }
 
     private final Error errorCode;
@@ -95,6 +95,9 @@ public class ClassToTest {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
+            if (errorCode == Error.NOT_EQUAL_TO_ITSELF) {
+                return false;
+            }
             return true;
         }
         if (obj == null) {
